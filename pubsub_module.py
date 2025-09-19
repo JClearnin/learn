@@ -1,3 +1,4 @@
+import inspect
 import queue
 import threading
 
@@ -42,18 +43,8 @@ class PubSubWithQueue:
             for q in list(self.topics[topic].values()):
                 q.put(message)  # 只放队列，不等待处理
 
+def hello():
+    print(f"name = {inspect.currentframe().f_code.co_name}")
 
-# 使用示例
-def consumer1(msg):
-    print(f"消费者1处理: {msg}")
-
-def consumer2(msg):
-    print(f"消费者2处理: {msg}")
-
-pubsub = PubSubWithQueue()
-sub_id1, q1 = pubsub.subscribe("news", consumer1)
-sub_id2, q2 = pubsub.subscribe("news", consumer2)
-
-pubsub.publish("news", "异步消息1")  # 立即返回，不等待处理
-pubsub.publish("news", "异步消息2")
-pubsub.unsubscribe("news", sub_id1, q1)  # 安全停止消费者1
+if __name__ == "__main__":
+    hello()
